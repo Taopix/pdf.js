@@ -1611,6 +1611,7 @@ class PDFPageProxy {
 
     console.log('render() renderTask', renderTask);
 
+    console.log('render() intentState.displayReadyCapability.promise', intentState.displayReadyCapability.promise);
     Promise.all([
       intentState.displayReadyCapability.promise,
       optionalContentConfigPromise,
@@ -1949,6 +1950,7 @@ class PDFPageProxy {
 
           if (intentState.displayReadyCapability) {
             console.log('Rejecting displayReadyCapability:', reason); 
+            console.log('intentState.displayReadyCapability', intentState.displayReadyCapability.promise);
             intentState.displayReadyCapability.reject(reason);
           } else if (intentState.opListReadCapability) {
             intentState.opListReadCapability.reject(reason);
