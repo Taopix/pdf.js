@@ -1763,6 +1763,7 @@ class PartialEvaluator {
           try {
             promiseBody(resolve, reject);
           } catch (ex) {
+            console.log('getOperatorList catch ex', ex)
             reject(ex);
           }
         }, reject);
@@ -2360,18 +2361,19 @@ class PartialEvaluator {
       closePendingRestoreOPS();
       resolve();
     }).catch(reason => {
+      console.log('getOperatorList main promise catch', reason)
       if (reason instanceof AbortException) {
         return;
       }
-      if (this.options.ignoreErrors) {
-        warn(
-          `getOperatorList - ignoring errors during "${task.name}" ` +
-            `task: "${reason}".`
-        );
+      // if (this.options.ignoreErrors) {
+      //   warn(
+      //     `getOperatorList - ignoring errors during "${task.name}" ` +
+      //       `task: "${reason}".`
+      //   );
 
-        closePendingRestoreOPS();
-        return;
-      }
+      //   closePendingRestoreOPS();
+      //   return;
+      // }
       throw reason;
     });
   }
