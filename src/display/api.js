@@ -1603,6 +1603,8 @@ class PDFPageProxy {
       operationsFilter,
     });
 
+    console.log('render() internalRenderTask', internalRenderTask)
+
     (intentState.renderTasks ||= new Set()).add(internalRenderTask);
     const renderTask = internalRenderTask.task;
 
@@ -1880,6 +1882,7 @@ class PDFPageProxy {
     annotationStorageSerializable,
     modifiedIds,
   }) {
+    console.log('_pumpOperatorList')
     if (typeof PDFJSDev === "undefined" || PDFJSDev.test("TESTING")) {
       assert(
         Number.isInteger(renderingIntent) && renderingIntent > 0,
@@ -1900,7 +1903,10 @@ class PDFPageProxy {
       },
       transfer
     );
+
+    console.log('_pumpOperatorList readableStream', readableStream)
     const reader = readableStream.getReader();
+    console.log('_pumpOperatorList reader', reader)
 
     const intentState = this._intentStates.get(cacheKey);
     intentState.streamReader = reader;

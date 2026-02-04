@@ -886,11 +886,14 @@ class WorkerMessageHandler {
               sink.close();
             },
             function (reason) {
+              console.log('worker.js getOperatorList reason', reason)
               finishWorkerTask(task);
               if (task.terminated) {
                 return; // ignoring errors from the terminated thread
               }
               sink.error(reason);
+
+              throw reason
 
               // TODO: Should `reason` be re-thrown here (currently that casues
               //       "Uncaught exception: ..." messages in the console)?
