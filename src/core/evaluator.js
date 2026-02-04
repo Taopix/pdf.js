@@ -1870,13 +1870,14 @@ class PartialEvaluator {
                 }
                 resolveXObject();
               }).catch(function (reason) {
+                console.log('evaluator reason', reason)
                 if (reason instanceof AbortException) {
                   return;
                 }
-                if (self.options.ignoreErrors) {
-                  warn(`getOperatorList - ignoring XObject: "${reason}".`);
-                  return;
-                }
+                // if (self.options.ignoreErrors) {
+                //   warn(`getOperatorList - ignoring XObject: "${reason}".`);
+                //   return;
+                // }
                 throw reason;
               })
             );
