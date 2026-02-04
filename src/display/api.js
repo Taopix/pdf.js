@@ -1474,6 +1474,7 @@ class PDFPageProxy {
     operationsFilter = null,
   }) {
     this._stats?.time("Overall");
+    console.log('api.js render()')
 
     const intentArgs = this._transport.getRenderingIntent(
       intent,

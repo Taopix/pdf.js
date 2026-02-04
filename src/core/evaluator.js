@@ -1710,6 +1710,7 @@ class PartialEvaluator {
     fallbackFontDict = null,
     prevRefs = null,
   }) {
+    console.trace('getOperatorList')
     if (stream.isAsync) {
       const bytes = await stream.asyncGetBytes();
       if (bytes) {
@@ -2361,6 +2362,7 @@ class PartialEvaluator {
       closePendingRestoreOPS();
       resolve();
     }).catch(reason => {
+      // 
       console.log('getOperatorList main promise catch', reason)
       if (reason instanceof AbortException) {
         return;
