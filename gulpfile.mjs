@@ -854,7 +854,7 @@ function createBuildNumber(done) {
 
       console.log("Extension build number: " + buildNumber);
 
-      const version = config.versionPrefix + buildNumber;
+      const version = config.version;
 
       exec('git log --format="%h" -n 1', function (err2, stdout2, stderr2) {
         let buildCommit = "";
