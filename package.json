@@ -73,6 +73,9 @@
     "type": "git",
     "url": "git://github.com/Taopix/pdf.js"
   },
+  "publishConfig": {
+    "@taopix:registry": "https://npm.pkg.github.com/"
+  },
   "engines": {
     "node": ">=20.16.0 || >=22.3.0"
   },
