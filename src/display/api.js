@@ -1605,10 +1605,11 @@ class PDFPageProxy {
       operationsFilter,
     });
 
-    // console.log('render() internalRenderTask', internalRenderTask);
-
+    
     (intentState.renderTasks ||= new Set()).add(internalRenderTask);
     const renderTask = internalRenderTask.task;
+
+    console.log('render() renderTask', renderTask);
 
     Promise.all([
       intentState.displayReadyCapability.promise,
@@ -1633,7 +1634,10 @@ class PDFPageProxy {
         });
         internalRenderTask.operatorListChanged();
       })
-      .catch(complete);
+      .catch(error => {
+        console.log('Promise.all caught error:', error);
+        complete(error);
+      });
 
     return renderTask;
   }
