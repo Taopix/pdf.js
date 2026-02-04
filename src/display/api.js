@@ -1619,9 +1619,7 @@ class PDFPageProxy {
       optionalContentConfigPromise,
     ])
       .then(([transparency, optionalContentConfig]) => {
-        console.log('render() inside promise.all', transparency, optionalContentConfig);
         if (this.destroyed) {
-          console.log('render() inside promise.all complete() return');
           complete();
           return;
         }
@@ -1859,7 +1857,7 @@ class PDFPageProxy {
 
     // TODO Refactor RenderPageRequest to separate rendering
     // and operator list logic
-    // intentState.displayReadyCapability?.resolve(transparency);
+    intentState.displayReadyCapability?.resolve(transparency);
   }
 
   /**
