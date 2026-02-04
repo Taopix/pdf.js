@@ -1603,7 +1603,7 @@ class PDFPageProxy {
       operationsFilter,
     });
 
-    console.log('render() internalRenderTask', internalRenderTask)
+    // console.log('render() internalRenderTask', internalRenderTask);
 
     (intentState.renderTasks ||= new Set()).add(internalRenderTask);
     const renderTask = internalRenderTask.task;
