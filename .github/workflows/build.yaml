@@ -1,0 +1,93 @@
+name: Taopix PDF.js build
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: |
+      !github.event.head_commit ||
+      !github.event.head_commit.message ||
+      contains(github.event.head_commit.message, '[pipeline]') ||
+      contains(github.event.head_commit.message, '[build]')
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          registry-url: https://npm.pkg.github.com/
+      - name: Get branch name
+        run: |
+          echo "branch_name=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          currentVersion=$(jq .version ./package.json)
+          echo "build_version=$currentVersion" >> $GITHUB_ENV
+      - name: Check build version
+        if: ${{ env.branch_name != 'master' }}
+        run: |
+          branch_name=${{ env.branch_name }}
+          branchId=${branch_name##*-}
+          if ! [[ $branch_name =~ ^.{1,}-[0-9]+$ ]]; then
+            branchId=1
+          fi
+          if ! [[ ${{ env.build_version }} =~ ^$branchId(\.[0-9]{1,}){2}$ ]]; then
+            versionString="${branchId}.0.1"
+            echo "build_version=${versionString}" >> $GITHUB_ENV
+          fi
+      - name: Check package doesn't exist
+        run: |
+          packageExists=$(npm show @taopix/pdf.js versions | grep ${{ env.build_version }} | wc -l | tr -d '[:space:]')
+          if [[ $packageExists == "1" ]]; then
+            echo "Package already built"
+            exit 1
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Cache node
+        id: node-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ./node_modules
+          key: node-${{ hashFiles('./package-lock.json') }}
+      - name: Node install
+        if: steps.node-cache.outputs.cache-hit != 'true'
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Save node cache
+        if: steps.node-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ./node_modules
+          key: ${{ steps.node-cache.outputs.cache-primary-key }}
+      - run: npx gulp generic
+      - name: Publish as dev
+        if: ${{ env.branch_name != 'master' }}
+        run: npm publish --tag dev
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Publish as latest
+        if: ${{ env.branch_name == 'master' }}
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - run: |
+          currentVersion=${{ env.build_version }}
+          echo "next_version=$(npx semver ${currentVersion//\"/} -i patch)" >> $GITHUB_ENV
+      - name: Bump package version
+        if: ${{ env.branch_name != 'master' }}
+        run: |
+          echo "Setting next version to ${{ env.next_version }}"
+          nextVersion=${{ env.next_version }}
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          cp ./package.json ./package.json.new
+          jq --arg vs "$nextVersion" '.version = $vs' ./package.json > ./package.json.new
+          rm ./package.json
+          mv ./package.json.new ./package.json
+          git add ./package.json
+          git commit -m "${{ env.branch_name }}: [bot skip ci] bump version"
+          git push

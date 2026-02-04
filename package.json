@@ -1,6 +1,14 @@
 {
-  "name": "pdf.js",
+  "name": "@taopix/pdf.js",
   "type": "module",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Taopix forked pdf-js",
+  "main": "build/pdf.js",
+  "types": "types/src/pdf.d.ts",
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@babel/core": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
@@ -63,7 +71,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mozilla/pdf.js.git"
+    "url": "git://github.com/Taopix/pdf.js"
   },
   "engines": {
     "node": ">=20.16.0 || >=22.3.0"
