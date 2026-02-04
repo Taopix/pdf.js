@@ -1527,6 +1527,7 @@ class PDFPageProxy {
       !this.recordedBBoxes && (recordOperations || recordForDebugger);
 
     const complete = error => {
+      console.log('complete() called with error:', error);
       intentState.renderTasks.delete(internalRenderTask);
 
       if (shouldRecordOperations) {
@@ -1552,6 +1553,7 @@ class PDFPageProxy {
       this.#tryCleanup();
 
       if (error) {
+        console.log('Rejecting internalRenderTask.capability with:', error);
         internalRenderTask.capability.reject(error);
 
         this._abortOperatorList({
@@ -1925,6 +1927,7 @@ class PDFPageProxy {
           pump();
         },
         reason => {
+          console.log('_pumpOperatorList stream error:', reason);  
           intentState.streamReader = null;
 
           if (this._transport.destroyed) {
@@ -1941,6 +1944,7 @@ class PDFPageProxy {
           }
 
           if (intentState.displayReadyCapability) {
+            console.log('Rejecting displayReadyCapability:', reason); 
             intentState.displayReadyCapability.reject(reason);
           } else if (intentState.opListReadCapability) {
             intentState.opListReadCapability.reject(reason);
