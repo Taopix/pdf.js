@@ -1616,7 +1616,7 @@ class PDFPageProxy {
     // remove optionalContentConfigPromise from below
     Promise.all([
       intentState.displayReadyCapability.promise,
-      optionalContentConfigPromise
+      optionalContentConfigPromise,
     ])
       .then(([transparency, optionalContentConfig]) => {
         console.log('render() inside promise.all', transparency, optionalContentConfig);
