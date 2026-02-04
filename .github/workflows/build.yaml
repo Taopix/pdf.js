@@ -38,7 +38,7 @@ jobs:
           fi
       - name: Check package doesn't exist
         run: |
-          packageExists=$(npm show @taopix/pdf.js versions | grep ${{ env.build_version }} | wc -l | tr -d '[:space:]')
+          packageExists=$(npm show @taopix/pdfjs-dist versions | grep ${{ env.build_version }} | wc -l | tr -d '[:space:]')
           if [[ $packageExists == "1" ]]; then
             echo "Package already built"
             exit 1
