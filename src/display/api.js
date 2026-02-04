@@ -1491,7 +1491,7 @@ class PDFPageProxy {
       this._transport.getOptionalContentConfig(renderingIntent);
 
     let intentState = this._intentStates.get(cacheKey);
-    console.log('render() intentState.displayReadyCapability START', intentState.displayReadyCapability)
+    console.log('render() intentState.displayReadyCapability START', intentState?.displayReadyCapability)
     if (!intentState) {
       intentState = Object.create(null);
       this._intentStates.set(cacheKey, intentState);
@@ -1612,7 +1612,7 @@ class PDFPageProxy {
 
     console.log('render() renderTask', renderTask);
 
-    console.log('render() intentState.displayReadyCapability.promise before promise.all', intentState.displayReadyCapability.promise);
+    console.log('render() intentState.displayReadyCapability.promise before promise.all', intentState?.displayReadyCapability.promise);
     // remove optionalContentConfigPromise from below
     Promise.all([
       intentState.displayReadyCapability.promise,
