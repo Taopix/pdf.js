@@ -46,32 +46,19 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Cache node
-        id: node-cache
-        uses: actions/cache/restore@v4
-        with:
-          path: ./node_modules
-          key: node-${{ hashFiles('./package-lock.json') }}
       - name: Node install
-        if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - name: Save node cache
-        if: steps.node-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: ./node_modules
-          key: ${{ steps.node-cache.outputs.cache-primary-key }}
       - run: npx gulp generic
       - name: Publish as dev
         if: ${{ env.branch_name != 'master' }}
-        run: npm publish --tag dev
+        run: npm publish ./build/dist --tag dev
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Publish as latest
         if: ${{ env.branch_name == 'master' }}
-        run: npm publish
+        run: npm publish ./build/dist
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - run: |
