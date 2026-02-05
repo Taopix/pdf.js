@@ -1612,7 +1612,13 @@ class PDFPageProxy {
     console.log('render() renderTask', renderTask);
 
     console.log('render() intentState.displayReadyCapability.promise before promise.all', intentState.displayReadyCapability.promise);
-    // console.log('render() optionalContentConfigPromise', optionalContentConfigPromise);
+
+    // Add a separate catch for displayReadyCapability?
+    intentState.displayReadyCapability.promise.catch(error => {
+      console.log('displayReadyCapability rejected:', error);
+      complete(error);
+    });
+
     // remove optionalContentConfigPromise from below
     Promise.all([
       intentState.displayReadyCapability.promise,
