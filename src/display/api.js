@@ -1613,13 +1613,6 @@ class PDFPageProxy {
 
     console.log('render() intentState.displayReadyCapability.promise before promise.all', intentState.displayReadyCapability.promise);
 
-    // Add a separate catch for displayReadyCapability?
-    intentState.displayReadyCapability.promise.catch(error => {
-      console.log('displayReadyCapability rejected:', error);
-      complete(error);
-    });
-
-    // remove optionalContentConfigPromise from below
     Promise.all([
       intentState.displayReadyCapability.promise,
       optionalContentConfigPromise,
@@ -1862,11 +1855,11 @@ class PDFPageProxy {
       return; // Rendering was cancelled.
     }
 
-    if (intentState.streamReader === null && !intentState.operatorList?.lastChunk) {
-      // Stream errored or was cancelled, don't start rendering
-      console.log('_startRenderPage: skipping, stream already errored');
-      return;
-    }
+    // if (intentState.streamReader === null && !intentState.operatorList?.lastChunk) {
+    //   // Stream errored or was cancelled, don't start rendering
+    //   console.log('_startRenderPage: skipping, stream already errored');
+    //   return;
+    // }
 
 
     this._stats?.timeEnd("Page Request");
