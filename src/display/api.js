@@ -3362,6 +3362,7 @@ class InternalRenderTask {
   }
 
   cancel(error = null, extraDelay = 0) {
+    console.trace('InternalRenderTask cancel()');
     this.running = false;
     this.cancelled = true;
     this.gfx?.endDrawing();
@@ -3370,6 +3371,8 @@ class InternalRenderTask {
       this.#rAF = null;
     }
     InternalRenderTask.#canvasInUse.delete(this._canvas);
+
+    console.log('InternalRenderTask error', error);
 
     error ||= new RenderingCancelledException(
       `Rendering cancelled, page ${this._pageIndex + 1}`,
