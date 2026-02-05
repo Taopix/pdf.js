@@ -557,6 +557,14 @@ class AbortException extends BaseException {
     super(msg, "AbortException");
   }
 }
+/**
+ * Error used to indicate an image exceeded the maximum size.
+ */
+class ImageSizeException extends BaseException {
+  constructor(msg) {
+    super(msg, "ImageSizeException");
+  }
+}
 
 function bytesToString(bytes) {
   if (typeof bytes !== "object" || bytes?.length === undefined) {
@@ -1282,6 +1290,7 @@ if (
 export {
   _isValidExplicitDest,
   AbortException,
+  ImageSizeException,
   AnnotationActionEventType,
   AnnotationBorderStyleType,
   AnnotationEditorParamsType,

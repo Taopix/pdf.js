@@ -15,6 +15,7 @@
 
 import {
   AbortException,
+  ImageSizeException,
   assert,
   DrawOPS,
   FONT_IDENTITY_MATRIX,
@@ -592,10 +593,7 @@ class PartialEvaluator {
       return;
     }
     if (maxImageSize !== -1 && w * h > maxImageSize) {
-      const error = new Error("Image exceeded maximum allowed size and was removed.");
-      error.code = 1;
-      error.name = 'ImageSizeError';
-      throw error;
+      throw new ImageSizeException("Image exceeded maximum allowed size and was removed.");
     }
 
     let optionalContent;
