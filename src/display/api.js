@@ -1901,7 +1901,6 @@ class PDFPageProxy {
       },
       transfer
     );
-
     const reader = readableStream.getReader();
 
     const intentState = this._intentStates.get(cacheKey);
@@ -1926,8 +1925,6 @@ class PDFPageProxy {
           if (this._transport.destroyed) {
             return; // Ignore any pending requests if the worker was terminated.
           }
-
-
           // Dont mark as complete or render if theres an error.
           // if (intentState.operatorList) {
           //   // Mark operator list as complete.
@@ -3351,7 +3348,6 @@ class InternalRenderTask {
     }
     InternalRenderTask.#canvasInUse.delete(this._canvas);
 
-
     error ||= new RenderingCancelledException(
       `Rendering cancelled, page ${this._pageIndex + 1}`,
       extraDelay
@@ -3416,7 +3412,6 @@ class InternalRenderTask {
       if (this.operatorList.lastChunk) {
         this.gfx.endDrawing();
         InternalRenderTask.#canvasInUse.delete(this._canvas);
-        console.log('InternalRenderTask _next this.callback(error)');
         this.callback();
       }
     }
