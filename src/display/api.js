@@ -1474,7 +1474,6 @@ class PDFPageProxy {
     operationsFilter = null,
   }) {
     this._stats?.time("Overall");
-    console.log('api.js render()')
 
     const intentArgs = this._transport.getRenderingIntent(
       intent,
@@ -1527,7 +1526,6 @@ class PDFPageProxy {
       !this.recordedBBoxes && (recordOperations || recordForDebugger);
 
     const complete = error => {
-      console.log('complete() called with error:', error);
       intentState.renderTasks.delete(internalRenderTask);
 
       if (shouldRecordOperations) {
@@ -1553,7 +1551,6 @@ class PDFPageProxy {
       this.#tryCleanup();
 
       if (error) {
-        console.log('Rejecting internalRenderTask.capability with:', error);
         internalRenderTask.capability.reject(error);
 
         this._abortOperatorList({
@@ -1609,17 +1606,12 @@ class PDFPageProxy {
     (intentState.renderTasks ||= new Set()).add(internalRenderTask);
     const renderTask = internalRenderTask.task;
 
-    console.log('render() renderTask', renderTask);
-
-    console.log('render() intentState.displayReadyCapability.promise before promise.all', intentState.displayReadyCapability.promise);
-
     Promise.all([
       intentState.displayReadyCapability.promise,
       optionalContentConfigPromise,
     ])
       .then(([transparency, optionalContentConfig]) => {
         if (this.destroyed) {
-          console.log('promise.all this.destroyed true');
           complete();
           return;
         }
@@ -1638,7 +1630,6 @@ class PDFPageProxy {
         internalRenderTask.operatorListChanged();
       })
       .catch(error => {
-        console.log('Promise.all caught error:', error);
         complete(error);
       });
 
@@ -1850,17 +1841,9 @@ class PDFPageProxy {
    */
   _startRenderPage(transparency, cacheKey) {
     const intentState = this._intentStates.get(cacheKey);
-    console.log('_startRenderPage intentState', intentState);
     if (!intentState) {
       return; // Rendering was cancelled.
     }
-
-    // if (intentState.streamReader === null && !intentState.operatorList?.lastChunk) {
-    //   // Stream errored or was cancelled, don't start rendering
-    //   console.log('_startRenderPage: skipping, stream already errored');
-    //   return;
-    // }
-
 
     this._stats?.timeEnd("Page Request");
     // TODO Refactor RenderPageRequest to separate rendering
@@ -1900,7 +1883,6 @@ class PDFPageProxy {
     annotationStorageSerializable,
     modifiedIds,
   }) {
-    console.log('_pumpOperatorList')
     if (typeof PDFJSDev === "undefined" || PDFJSDev.test("TESTING")) {
       assert(
         Number.isInteger(renderingIntent) && renderingIntent > 0,
@@ -1922,9 +1904,7 @@ class PDFPageProxy {
       transfer
     );
 
-    console.log('_pumpOperatorList readableStream', readableStream)
     const reader = readableStream.getReader();
-    console.log('_pumpOperatorList reader', reader)
 
     const intentState = this._intentStates.get(cacheKey);
     intentState.streamReader = reader;
@@ -3367,7 +3347,6 @@ class InternalRenderTask {
   }
 
   cancel(error = null, extraDelay = 0) {
-    console.trace('InternalRenderTask cancel()');
     this.running = false;
     this.cancelled = true;
     this.gfx?.endDrawing();
@@ -3377,13 +3356,11 @@ class InternalRenderTask {
     }
     InternalRenderTask.#canvasInUse.delete(this._canvas);
 
-    console.log('InternalRenderTask error', error);
 
     error ||= new RenderingCancelledException(
       `Rendering cancelled, page ${this._pageIndex + 1}`,
       extraDelay
     );
-    console.log('InternalRenderTask this.callback(error)');
     this.callback(error);
 
     this.task.onError?.(error);

@@ -893,8 +893,6 @@ class WorkerMessageHandler {
               }
               sink.error(reason);
 
-              // throw reason
-
               // TODO: Should `reason` be re-thrown here (currently that casues
               //       "Uncaught exception: ..." messages in the console)?
             }

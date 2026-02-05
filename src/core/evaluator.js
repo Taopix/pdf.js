@@ -592,8 +592,10 @@ class PartialEvaluator {
       return;
     }
     if (maxImageSize !== -1 && w * h > maxImageSize) {
-      const msg = "Image exceeded maximum allowed size and was removed.";
-      throw new Error(msg);
+      const error = new Error("Image exceeded maximum allowed size and was removed.");
+      error.code = 1;
+      error.name = 'ImageSizeError';
+      throw error;
     }
 
     let optionalContent;
@@ -1764,7 +1766,6 @@ class PartialEvaluator {
           try {
             promiseBody(resolve, reject);
           } catch (ex) {
-            console.log('getOperatorList catch ex', ex)
             reject(ex);
           }
         }, reject);
@@ -1872,14 +1873,10 @@ class PartialEvaluator {
                 }
                 resolveXObject();
               }).catch(function (reason) {
-                console.log('evaluator reason', reason)
                 if (reason instanceof AbortException) {
                   return;
                 }
-                // if (self.options.ignoreErrors) {
-                //   warn(`getOperatorList - ignoring XObject: "${reason}".`);
-                //   return;
-                // }
+                // Throw image error from buildPaintImageXObject.
                 throw reason;
               })
             );
@@ -2362,20 +2359,9 @@ class PartialEvaluator {
       closePendingRestoreOPS();
       resolve();
     }).catch(reason => {
-      // 
-      console.log('getOperatorList main promise catch', reason)
       if (reason instanceof AbortException) {
         return;
       }
-      // if (this.options.ignoreErrors) {
-      //   warn(
-      //     `getOperatorList - ignoring errors during "${task.name}" ` +
-      //       `task: "${reason}".`
-      //   );
-
-      //   closePendingRestoreOPS();
-      //   return;
-      // }
       throw reason;
     });
   }

@@ -468,7 +468,6 @@ class Page {
     annotationStorage = null,
     modifiedIds = null,
   }) {
-    console.log('document getOperatorList');
     const contentStreamPromise = this.getContentStream();
     const resourcesPromise = this.loadResources(RESOURCES_KEYS_OPERATOR_LIST);
 
