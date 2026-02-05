@@ -1626,6 +1626,7 @@ class PDFPageProxy {
     ])
       .then(([transparency, optionalContentConfig]) => {
         if (this.destroyed) {
+          console.log('promise.all this.destroyed true');
           complete();
           return;
         }
@@ -3374,6 +3375,7 @@ class InternalRenderTask {
       `Rendering cancelled, page ${this._pageIndex + 1}`,
       extraDelay
     );
+    console.log('InternalRenderTask this.callback(error)');
     this.callback(error);
 
     this.task.onError?.(error);
@@ -3434,6 +3436,7 @@ class InternalRenderTask {
       if (this.operatorList.lastChunk) {
         this.gfx.endDrawing();
         InternalRenderTask.#canvasInUse.delete(this._canvas);
+        console.log('InternalRenderTask _next this.callback(error)');
         this.callback();
       }
     }
