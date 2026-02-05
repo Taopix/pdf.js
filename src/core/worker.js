@@ -886,7 +886,6 @@ class WorkerMessageHandler {
               sink.close();
             },
             function (reason) {
-              console.log('worker.js getOperatorList reason', reason)
               finishWorkerTask(task);
               if (task.terminated) {
                 return; // ignoring errors from the terminated thread

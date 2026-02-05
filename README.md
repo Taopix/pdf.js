@@ -135,3 +135,9 @@ Talk to us on Matrix:
 File an issue:
 
 + https://github.com/mozilla/pdf.js/issues/new/choose
+
+## Building for Taopix
+
+To do a full build increment the `package.json` version number and run `npm i`. Then change the `version` and `stableVersion` inside the `pdfjs.config` so they all match.
+Include `[build]` in the commit message and this will publish a new version.
+

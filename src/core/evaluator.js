@@ -1710,7 +1710,6 @@ class PartialEvaluator {
     fallbackFontDict = null,
     prevRefs = null,
   }) {
-    console.trace('getOperatorList')
     if (stream.isAsync) {
       const bytes = await stream.asyncGetBytes();
       if (bytes) {

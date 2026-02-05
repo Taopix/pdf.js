@@ -1602,7 +1602,6 @@ class PDFPageProxy {
       operationsFilter,
     });
 
-    
     (intentState.renderTasks ||= new Set()).add(internalRenderTask);
     const renderTask = internalRenderTask.task;
 
@@ -1844,11 +1843,10 @@ class PDFPageProxy {
     if (!intentState) {
       return; // Rendering was cancelled.
     }
-
     this._stats?.timeEnd("Page Request");
+
     // TODO Refactor RenderPageRequest to separate rendering
     // and operator list logic
-
     intentState.displayReadyCapability?.resolve(transparency);
   }
 
@@ -1923,7 +1921,6 @@ class PDFPageProxy {
           pump();
         },
         reason => {
-          console.log('_pumpOperatorList stream error:', reason);  
           intentState.streamReader = null;
 
           if (this._transport.destroyed) {
@@ -1943,8 +1940,6 @@ class PDFPageProxy {
           // }
 
           if (intentState.displayReadyCapability) {
-            console.log('Rejecting displayReadyCapability:', reason); 
-            console.log('intentState.displayReadyCapability', intentState.displayReadyCapability.promise);
             intentState.displayReadyCapability.reject(reason);
           } else if (intentState.opListReadCapability) {
             intentState.opListReadCapability.reject(reason);
