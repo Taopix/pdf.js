@@ -21,6 +21,7 @@ import {
   ResponseException,
   UnknownErrorException,
   unreachable,
+  ImageSizeException
 } from "./util.js";
 
 const CallbackKind = {
@@ -47,7 +48,8 @@ function wrapReason(ex) {
     ex instanceof InvalidPDFException ||
     ex instanceof PasswordException ||
     ex instanceof ResponseException ||
-    ex instanceof UnknownErrorException
+    ex instanceof UnknownErrorException || 
+    ex instanceof ImageSizeException
   ) {
     // Avoid re-creating the exception when its type is already correct.
     return ex;
@@ -69,6 +71,8 @@ function wrapReason(ex) {
       return new ResponseException(ex.message, ex.status, ex.missing);
     case "UnknownErrorException":
       return new UnknownErrorException(ex.message, ex.details);
+    case "ImageSizeException":
+      return new ImageSizeException(ex.message);
   }
   return new UnknownErrorException(ex.message, ex.toString());
 }
