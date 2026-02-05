@@ -1947,15 +1947,18 @@ class PDFPageProxy {
           if (this._transport.destroyed) {
             return; // Ignore any pending requests if the worker was terminated.
           }
-          if (intentState.operatorList) {
-            // Mark operator list as complete.
-            intentState.operatorList.lastChunk = true;
 
-            for (const internalRenderTask of intentState.renderTasks) {
-              internalRenderTask.operatorListChanged();
-            }
-            this.#tryCleanup();
-          }
+
+          // Dont mark as complete or render if theres an error.
+          // if (intentState.operatorList) {
+          //   // Mark operator list as complete.
+          //   intentState.operatorList.lastChunk = true;
+
+          //   for (const internalRenderTask of intentState.renderTasks) {
+          //     internalRenderTask.operatorListChanged();
+          //   }
+          //   this.#tryCleanup();
+          // }
 
           if (intentState.displayReadyCapability) {
             console.log('Rejecting displayReadyCapability:', reason); 
