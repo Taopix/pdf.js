@@ -1856,16 +1856,24 @@ class PDFPageProxy {
    * @private
    */
   _startRenderPage(transparency, cacheKey) {
-    console.log('_startRenderPage');
+    console.log('_startRenderPage')
     const intentState = this._intentStates.get(cacheKey);
     if (!intentState) {
       return; // Rendering was cancelled.
     }
-    this._stats?.timeEnd("Page Request");
 
+    if (intentState.streamReader === null && !intentState.operatorList?.lastChunk) {
+      // Stream errored or was cancelled, don't start rendering
+      console.log('_startRenderPage: skipping, stream already errored');
+      return;
+    }
+
+
+    this._stats?.timeEnd("Page Request");
     // TODO Refactor RenderPageRequest to separate rendering
     // and operator list logic
-    // intentState.displayReadyCapability?.resolve(transparency);
+
+    intentState.displayReadyCapability?.resolve(transparency);
   }
 
   /**
