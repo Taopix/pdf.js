@@ -1856,8 +1856,8 @@ class PDFPageProxy {
    * @private
    */
   _startRenderPage(transparency, cacheKey) {
-    console.log('_startRenderPage intentState', intentState);
     const intentState = this._intentStates.get(cacheKey);
+    console.log('_startRenderPage intentState', intentState);
     if (!intentState) {
       return; // Rendering was cancelled.
     }
